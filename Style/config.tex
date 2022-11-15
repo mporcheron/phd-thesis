@@ -1,0 +1,514 @@
+%!TEX root = ../PhDThesis.tex
+
+% *********************************************************************************************************************
+
+\newif\ifdrafting  % SET TO \draftingfalse OR \draftingtrue
+\draftingfalse
+
+\newif\ifopendyslexic  % SET TO \changesfalse OR \changestrue
+\opendyslexicfalse
+
+\newif\ifresubmission  % SET TO \resubmissionfalse OR \resubmissiontrue
+\resubmissionfalse
+
+\newif\ifcorrections  % SET TO \correctionsfalse OR \correctionstrue
+\correctionsfalse
+
+\newif\ifhyphenate % SET TO \hyphenatefalse OR \hyphenatetrue
+\hyphenatetrue
+
+\newif\ifpaper     % SET TO \paperfalse OR \papertrue
+\paperfalse
+
+% ****************************************************************************************************
+% 0. Set the encoding of your files. UTF-8 is the only sensible encoding nowadays. If you can't read
+% äöüßáéçèê∂åëæƒÏ€ then change the encoding setting in your editor, not the line below. If your editor
+% does not support utf8 use another editor!
+% *****************************************************************************************************
+
+\PassOptionsToPackage{utf8}{inputenc}
+\usepackage{inputenc}
+
+% ****************************************************************************************************
+% 1. Configure classicthesis for your needs here
+% ****************************************************************************************************
+
+\ifdrafting
+    \PassOptionsToPackage{eulerchapternumbers,listings,drafting,%
+                             pdfspacing,floatperchapter,%linedheaders,%
+                             subfig,beramono,eulermath,parts}{Style/classicthesis}
+\else
+    \PassOptionsToPackage{eulerchapternumbers,listings,%
+                         pdfspacing,floatperchapter,%linedheaders,%
+                         subfig,beramono,eulermath,parts}{Style/classicthesis}
+\fi
+
+% ****************************************************************************************************
+% 2. Personal data and user ad-hoc commands
+% ****************************************************************************************************
+\newcommand{\myTitle}{Understanding Conversation Around Technology Use in Casual-Social Settings\xspace}
+\newcommand{\myDegree}{Doctor of Philosophy\xspace}
+\newcommand{\myName}{Martin Porcheron\xspace}
+\newcommand{\myProf}{Joel E. Fischer\xspace}
+\newcommand{\myOtherProf}{Sarah Sharples\xspace}
+\newcommand{\mySupervisor}{Put name here\xspace}
+\newcommand{\myFaculty}{School of Computer Science\xspace}
+\newcommand{\myDepartment}{Mixed Reality Laboratory\xspace}
+\newcommand{\myUni}{University of Nottingham\xspace}
+\newcommand{\myLocation}{Nottingham\xspace}
+\newcommand{\myVersion}{\VCRevisionMod\xspace}
+
+\ifdrafting
+    \newcommand{\myDeclaration}{Draft\xspace}
+    \newcommand{\myTime}{\VCDateISO\xspace}
+\else
+    \newcommand{\myDeclaration}{Thesis submitted to the University of Nottingham\\for the degree of Doctor of Philosophy.\xspace}
+    \newcommand{\myTime}{August 2019\xspace}
+\fi
+
+% ********************************************************************
+% Setup, finetuning, and useful commands
+% ********************************************************************
+\newcounter{dummy} % necessary for correct hyperlinks (to index, bib, etc.)
+\newlength{\abcd} % for ab..z string length calculation
+\providecommand{\mLyX}{L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
+\newcommand{\ie}{i.\,e.}
+\newcommand{\Ie}{I.\,e.}
+\newcommand{\eg}{e.\,g.}
+\newcommand{\Eg}{E.\,g.}
+% ****************************************************************************************************
+
+% ********************************************************************
+% Hide Known Warnings
+% ********************************************************************
+\RequirePackage{silence}
+\WarningFilter[MPThesis]{scrreprt}{Usage of package `titlesec' together}
+\WarningFilter[MPThesis]{titlesec}{Non standard sectioning command detected}
+\WarningFilter[MPThesis]{scrreprt}{Activating an ugly workaround for a missing}
+\WarningFilter[MPThesis]{scrlayer-scrpage}{Very small head height detected}
+\WarningFilter[MPThesis]{scrlayer-scrpage}{\headheight to low}
+\WarningFilter[MPThesis]{scrlayer-scrpage}{\footheight to low}
+\WarningFilter[MPThesis]{typearea}{page content and margins higher than paper}
+\WarningFilter[MPThesis]{hyperref}{Option `pdftex' has}
+\ActivateWarningFilters[MPThesis]%
+
+
+
+% ****************************************************************************************************
+% 3. Loading some handy packages
+% ****************************************************************************************************
+% ********************************************************************
+% Packages with options that might require adjustments
+% ********************************************************************
+\PassOptionsToPackage{british}{babel}   % change this to your language(s)
+% Spanish languages need extra options in order to work with this template
+%\PassOptionsToPackage{spanish,es-lcroman}{babel}
+    \usepackage{babel}
+
+\makeatletter
+\long\def\emph#1{\ifmmode\nfss@text{\em #1}\else\hmode@bgroup\text@command{#1}\em\check@icl #1\check@icr\expandafter\egroup\fi}
+\makeatother
+
+\usepackage{csquotes}
+\PassOptionsToPackage{%
+    backend=biber, %instead of bibtex
+    %backend=bibtex8,bibencoding=ascii,%
+    language=british,%
+    %style=numeric-comp,%
+    style=authoryear-ibid, % Author 1999, 2010
+    bibstyle=authoryear,
+    dashed=false, % dashed: substitute rep. author with ---
+    sorting=nyt, % name, year, title
+    giveninits=true,   
+    maxbibnames=99, % default: 3, et al.
+    maxcitenames=2,
+    uniquelist=false,
+    uniquename=init,
+    backref=true,%
+    natbib=true % natbib compatibility mode (\citep and \citet still work)
+}{biblatex}
+    \usepackage{biblatex}
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
+
+\renewcommand*{\bibsetup}{%
+  \interlinepenalty=10000\relax % default is 5000
+  \widowpenalty=10000\relax
+  \clubpenalty=10000\relax
+  \raggedbottom
+  \frenchspacing
+  \biburlsetup}
+
+% \DeclareFieldFormat{citehyperref}{%
+%   \DeclareFieldAlias{bibhyperref}{noformat}% Avoid nested links
+%   \bibhyperref{#1}}
+
+% \DeclareFieldFormat{textcitehyperref}{%
+%   \DeclareFieldAlias{bibhyperref}{noformat}% Avoid nested links
+%   \bibhyperref{%
+%     #1%
+%     \ifbool{cbx:parens}
+%       {\bibcloseparen\global\boolfalse{cbx:parens}}
+%       {}}}
+
+% \savebibmacro{cite}
+% \savebibmacro{textcite}
+
+% \renewbibmacro*{cite}{%
+%   \printtext[citehyperref]{%
+%     \restorebibmacro{cite}%
+%     \usebibmacro{cite}}}
+
+% \renewbibmacro*{textcite}{%
+%   \ifboolexpr{
+%     ( not test {\iffieldundef{prenote}} and
+%       test {\ifnumequal{\value{citecount}}{1}} )
+%     or
+%     ( not test {\iffieldundef{postnote}} and
+%       test {\ifnumequal{\value{citecount}}{\value{citetotal}}} )
+%   }
+%     {\DeclareFieldAlias{textcitehyperref}{noformat}}
+%     {}%
+%   \printtext[textcitehyperref]{%
+%     \restorebibmacro{textcite}%
+%     \usebibmacro{textcite}}}
+
+\PassOptionsToPackage{fleqn}{amsmath}       % math environments and more by the AMS
+    \usepackage{amsmath}
+
+\DeclareNameAlias{sortname}{last-first}
+%\DeclareNameAlias{author}{first-last}
+
+% ********************************************************************
+% General useful packages
+% ********************************************************************
+\PassOptionsToPackage{T1}{fontenc} % T2A for cyrillics
+    \usepackage{fontenc}
+\usepackage{textcomp} % fix warning with missing font shapes
+\usepackage{scrhack} % fix warnings when using KOMA with listings package
+\usepackage{xspace} % to get the spacing after macros right
+\usepackage{mparhack} % get marginpar right
+%\usepackage{fixltx2e} % fixes some LaTeX stuff --> since 2015 in the LaTeX kernel (see below)
+%\usepackage[latest]{latexrelease} % will be used once available in more distributions (ISSUE #107)
+\PassOptionsToPackage{printonlyused,smaller}{acronym}
+    \usepackage{acronym} % nice macros for handling all acronyms in the thesis
+    %\renewcommand{\bflabel}[1]{{#1}\hfill} % fix the list of acronyms --> no longer working
+    %\renewcommand*{\acsfont}[1]{\textsc{#1}}
+    \renewcommand*{\aclabelfont}[1]{\acsfont{#1}}
+% ****************************************************************************************************
+
+
+% ****************************************************************************************************
+% 4. Setup floats: tables, (sub)figures, and captions
+% ****************************************************************************************************
+\usepackage{tabularx} % better tables
+    \setlength{\extrarowheight}{3pt} % increase table row height
+\newcommand{\tableheadline}[1]{\multicolumn{1}{c}{\spacedlowsmallcaps{#1}}}
+\newcommand{\myfloatalign}{\centering} % to be used with each float for alignment
+\usepackage{caption}
+% Thanks to cgnieder and Claus Lahiri
+% http://tex.stackexchange.com/questions/69349/spacedlowsmallcaps-in-caption-label
+% [REMOVED DUE TO OTHER PROBLEMS, SEE ISSUE #82]
+%\DeclareCaptionLabelFormat{smallcaps}{\bothIfFirst{#1}{~}\MakeTextLowercase{\textsc{#2}}}
+%\captionsetup{font=small,labelformat=smallcaps} % format=hang,
+\captionsetup{font=small} % format=hang,
+\usepackage{subfig}
+% ****************************************************************************************************
+
+
+% ****************************************************************************************************
+% 5. Setup code listings
+% ****************************************************************************************************
+\usepackage{listings}
+%\lstset{emph={trueIndex,root},emphstyle=\color{BlueViolet}}%\underbar} % for special keywords
+\lstset{language=[LaTeX]Tex,%C++,
+    morekeywords={PassOptionsToPackage,selectlanguage},
+    keywordstyle=\color{RoyalBlue},%\bfseries,
+    basicstyle=\small\ttfamily,
+    %identifierstyle=\color{NavyBlue},
+    commentstyle=\color{Green}\ttfamily,
+    stringstyle=\rmfamily,
+    numbers=none,%left,%
+    numberstyle=\scriptsize,%\tiny
+    stepnumber=5,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    %frameround=ftff,
+    %frame=single,
+    belowcaptionskip=.75\baselineskip
+    %frame=L
+}
+% ****************************************************************************************************
+
+
+% ****************************************************************************************************
+% 6. PDFLaTeX, hyperreferences and citation backreferences
+% ****************************************************************************************************
+% ********************************************************************
+% Using PDFLaTeX
+% ********************************************************************
+\PassOptionsToPackage{pdftex,hyperfootnotes=false,pdfpagelabels}{hyperref}
+\usepackage{hyperref}  % backref linktocpage pagebackref
+\pdfcompresslevel=9
+\pdfadjustspacing=1
+\PassOptionsToPackage{pdftex}{graphicx}
+    \usepackage{graphicx}
+
+% ********************************************************************
+% Hyperreferences
+% ********************************************************************
+\hypersetup{%
+    %draft, % = no hyperlinking at all (useful in b/w printouts)
+    colorlinks=true, linktocpage=true, pdfstartpage=3, pdfstartview=FitV,%
+    % uncomment the following line if you want to have black links (e.g., for printing)
+    %colorlinks=false, linktocpage=false, pdfstartpage=3, pdfstartview=FitV, pdfborder={0 0 0},%
+    breaklinks=true, pdfpagemode=UseNone, pageanchor=true, pdfpagemode=UseOutlines,%
+    plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,%
+    hypertexnames=true, pdfhighlight=/O,%nesting=true,%frenchlinks,%
+    urlcolor=RoyalBlue, linkcolor=RoyalBlue, citecolor=webgreen, %pagecolor=RoyalBlue,%
+    %urlcolor=RoyalBlue, linkcolor=Black, citecolor=Black, %pagecolor=Black,%
+    pdftitle={\myTitle},%
+    pdfauthor={\textcopyright\ \myName, \myUni, \myFaculty},%
+    pdfsubject={},%
+    pdfkeywords={},%
+    pdfcreator={pdfLaTeX},%
+    pdfproducer={LaTeX}%
+}
+
+\ifpaper
+    \hypersetup{%
+        colorlinks=false, linktocpage=false, pdfstartpage=3, pdfstartview=FitV, pdfborder={0 0 0},%
+        urlcolor=RoyalBlue, linkcolor=Black, citecolor=Black, %pagecolor=Black,%
+    }
+\fi
+
+% ********************************************************************
+% Setup autoreferences
+% ********************************************************************
+% There are some issues regarding autorefnames
+% http://www.ureader.de/msg/136221647.aspx
+% http://www.tex.ac.uk/cgi-bin/texfaq2html?label=latexwords
+% you have to redefine the makros for the
+% language you use, e.g., american, ngerman
+% (as chosen when loading babel/AtBeginDocument)
+% ********************************************************************
+\makeatletter
+\@ifpackageloaded{babel}%
+    {%
+       \addto\extrasamerican{%
+            \renewcommand*{\figureautorefname}{Figure}%
+            \renewcommand*{\tableautorefname}{Table}%
+            \renewcommand*{\partautorefname}{Part}%
+            \renewcommand*{\chapterautorefname}{Chapter}%
+            \renewcommand*{\sectionautorefname}{Section}%
+            \renewcommand*{\subsectionautorefname}{Section}%
+            \renewcommand*{\subsubsectionautorefname}{Section}%
+                }%
+       \addto\extrasbritish{%
+            \renewcommand*{\figureautorefname}{Figure}%
+            \renewcommand*{\tableautorefname}{Table}%
+            \renewcommand*{\partautorefname}{Part}%
+            \renewcommand*{\chapterautorefname}{Chapter}%
+            \renewcommand*{\appendixautorefname}{Appendix}%
+            \renewcommand*{\sectionautorefname}{Section}%
+            \renewcommand*{\subsectionautorefname}{Section}%
+            \renewcommand*{\subsubsectionautorefname}{Section}%
+                }%
+       \addto\extrasngerman{%
+            \renewcommand*{\paragraphautorefname}{Absatz}%
+            \renewcommand*{\subparagraphautorefname}{Unterabsatz}%
+            \renewcommand*{\footnoteautorefname}{Fu\"snote}%
+            \renewcommand*{\FancyVerbLineautorefname}{Zeile}%
+            \renewcommand*{\theoremautorefname}{Theorem}%
+            \renewcommand*{\appendixautorefname}{Anhang}%
+            \renewcommand*{\equationautorefname}{Gleichung}%
+            \renewcommand*{\itemautorefname}{Punkt}%
+                }%
+            % Fix to getting autorefs for subfigures right (thanks to Belinda Vogt for changing the definition)
+            \providecommand{\subfigureautorefname}{\figureautorefname}%
+    }{\relax}
+\makeatother
+
+
+% ****************************************************************************************************
+% 7. Last calls before the bar closes
+% ****************************************************************************************************
+% ********************************************************************
+% Development Stuff
+% ********************************************************************
+\listfiles
+%\PassOptionsToPackage{l2tabu,orthodox,abort}{nag}
+%   \usepackage{nag}
+%\PassOptionsToPackage{warning, all}{onlyamsmath}
+%   \usepackage{onlyamsmath}
+
+% ********************************************************************
+% Last, but not least...
+% ********************************************************************
+\usepackage{Style/classicthesis}
+\usepackage{Style/fragments}
+% ****************************************************************************************************
+
+%\usepackage{chngcntr}
+%\counterwithin{figure}{subsection}
+
+% ****************************************************************************************************
+% 8. Further adjustments (experimental)
+% ****************************************************************************************************
+% ********************************************************************
+% Changing the text area
+% ********************************************************************
+%\linespread{1.05} % a bit more for Palatino
+%\areaset[current]{312pt}{761pt} % 686 (factor 2.2) + 33 head + 42 head \the\footskip
+%\setlength{\marginparwidth}{7em}%
+%\setlength{\marginparsep}{2em}%
+
+% ********************************************************************
+% Using different fonts
+% ********************************************************************
+\ifopendyslexic
+    \usepackage{fontspec}
+    \setmainfont{OpenDyslexic}
+    \setmonofont{OpenDyslexicMono}
+\fi
+
+%\usepackage[oldstylenums]{kpfonts} % oldstyle notextcomp
+%\usepackage[osf]{libertine}
+%\usepackage[light,condensed,math]{iwona}
+%\renewcommand{\sfdefault}{iwona}
+%\usepackage{lmodern} % <-- no osf support :-(
+%\usepackage{cfr-lm} %
+%\usepackage[urw-garamond]{mathdesign} <-- no osf support :-(
+%\usepackage[default,osfigures]{opensans} % scale=0.95
+%\usepackage[sfdefault]{FiraSans}
+% ****************************************************************************************************
+
+
+% Line spacing
+\linespread{1.5}
+
+% A much shorter footer
+\setlength{\footnotesep}{\baselineskip}
+
+% Reusable quotes, primarly, the research questions
+\include{ReusableQuotes}
+
+% Additional packages
+\usepackage{pdfpages}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{pdflscape}
+\usepackage{multirow}
+\usepackage{amsfonts}
+
+% Create appendix links that say "Appendix" and not "Chapter"
+\newcommand\appref[1]{\hyperref[#1]{Appendix~\ref*{#1}}}
+\newcommand\apprefpoint[2]{\hyperref[#1]{Appendix~\ref*{#1}.#2}}
+
+% Make PDFs that are included obey the twoside margin shifting
+\ifbool{@twoside}{
+    \includepdfset{offset=-1.05cm 0cm}
+}{
+}
+
+% Allow to hide titles from the ToC
+% https://stackoverflow.com/questions/2785260/hide-an-entry-from-toc-in-latex#2785740
+\newcommand{\nocontentsline}[3]{}
+\newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
+
+% Disable hyphenation
+\ifhyphenate\else
+    \hyphenpenalty=10000
+    \exhyphenpenalty=10000
+    \righthyphenmin=32
+    \lefthyphenmin=32
+\fi
+
+% Enable twoside if paper
+\ifpaper
+    \KOMAoptions{twoside=true}
+\else
+    \KOMAoptions{twoside=false}
+
+    % Marginnotes on the left only when not twoside
+    % https://tex.stackexchange.com/questions/73102/marginnote-on-left-side-only-using-document-class-book-with-twoside
+    \makeatletter
+    \patchcmd{\@mn@margintest}{\@tempswafalse}{\@tempswatrue}{}{}
+    \patchcmd{\@mn@margintest}{\@tempswafalse}{\@tempswatrue}{}{}
+    \reversemarginpar
+    \makeatother
+\fi
+
+% \makeatletter
+% \patchcmd{\@chapter}{\addtocontents{lofrags}{\protect\addvspace{10\p@}}}{}{}{}%
+% \makeatother
+
+\usepackage[author={Martin Porcheron}]{pdfcomment}
+
+\ifpaper%
+    \resubmissionfalse
+    \correctionsfalse
+\fi
+
+\ifresubmission
+    \NewEnviron{revisedsubmission}[1][none]{%
+        \IfEq{#1}{none}{}{\pdfmargincomment{{#1}}}%
+        {\color{red}\BODY}%
+    }
+    \newcommand{\fragresubmission}[1]{\pdfmargincomment{#1}\color{red}}
+    \DeclareDocumentCommand\iresubmission{s o m}{\IfValueTF{#2}%
+        {%
+            {\pdfmargincomment{#2}{\IfBooleanT{#1}{ }\color{red}#3}}%
+        }{%
+            {\color{red}#3}}%
+        }
+    \DeclareDocumentCommand{\resubmission}{m}{\pdfmargincomment{#1}}
+\else
+    \NewEnviron{revisedsubmission}[1][none]{\BODY}
+    \newcommand{\fragresubmission}[1]{}
+    \DeclareDocumentCommand\iresubmission{s o m}{#3}
+    \DeclareDocumentCommand{\resubmission}{m}{}
+\fi
+
+\ifcorrections
+    \NewEnviron{corrections}[1][none]{%
+        \IfEq{#1}{none}{}{\pdfmargincomment{{#1}}}%
+        {\color{blue}\BODY}%
+    }
+    \newcommand{\fragcorrection}[1]{\pdfmargincomment{#1}\color{blue}}
+    \DeclareDocumentCommand\icorrection{s o m}{\IfValueTF{#2}%
+        {%
+            {\pdfmargincomment{#2}{\IfBooleanT{#1}{ }\color{blue}#3}}%
+        }{%
+            {\color{blue}#3}}%
+        }
+    \DeclareDocumentCommand{\correction}{m}{\pdfmargincomment{#1}}
+\else
+    \NewEnviron{corrections}[1][none]{\BODY}
+    \newcommand{\fragcorrection}[1]{}
+    \DeclareDocumentCommand\icorrection{s o m}{#3}
+    \DeclareDocumentCommand{\correction}{m}{}
+\fi
+
+
+\DeclareDocumentCommand\crpagebreak{}{\newpage}
+\DeclareDocumentCommand\quoteauthor{m}{\begin{flushright}--- #1\end{flushright}}
+
+
+\usepackage{enumitem}
+
+
+\hyphenation{Claw-son}
+\hyphenation{be-tween}
+\hyphenation{comp-anies}
+\hyphenation{de-vices}
+\hyphenation{class-rooms}
+\hyphenation{touch-screen}
+\hyphenation{smart-speaker}
+\hyphenation{smart-speakers}
+\hyphenation{convers-ation-alists}
+\hyphenation{multi-screen}
+\hyphenation{supp-orted}
+\hyphenation{with-out}
+\hyphenation{non-port-able}

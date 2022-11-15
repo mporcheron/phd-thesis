@@ -1,0 +1,115 @@
+%!TEX option = --shell-escape
+
+% *********************************************************************************************************************
+% A Classic Thesis Style
+% An Homage to The Elements of Typographic Style
+%
+% Copyright (C) 2015 André Miede http://www.miede.de
+%finishme
+% If you like the style then I would appreciate a postcard. My address
+% can be found in the file ClassicThesis.pdf. A collection of the
+% postcards I received so far is available online at
+% http://postcards.miede.de\bibliography{Bibliography/Publications}
+%
+% License:
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2 of the License, or
+% (at your option) any later version.\include{vc}
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; see the file COPYING.  If not, write to
+% the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+% Boston, MA 02111-1307, USA.
+%
+% *********************************************************************************************************************
+
+\RequirePackage{fix-cm}
+\documentclass[ a4paper,titlepage,numbers=noenddot,headinclude,%twoside,%h1headlines,% letterpaper %twoside,openright
+                footinclude=true,cleardoublepage=empty,abstractoff,
+                BCOR=5mm,paper=a4,fontsize=11pt,
+                british
+                ]{scrreprt}
+
+\input{Style/config}
+
+\immediate\write18{sh ./Style/vc}
+\include{Style/vc}
+\addbibresource{Bibliography/library.bib}
+
+% *********************************************************************************************************************
+
+\begin{document}
+\frenchspacing
+\raggedbottom
+\selectlanguage{british} % american ngerman
+%\renewcommand*{\bibname}{new name}
+%\setbibpreamble{}
+\pagenumbering{roman}
+\pagestyle{plain}
+
+% *********************************************************************************************************************
+
+\include{FrontBackmatter/Titlepage}
+\include{FrontBackmatter/Titleback}
+\ifdrafting
+\else
+    \cleardoublepage\include{FrontBackmatter/Dedication}
+    \cleardoublepage\include{FrontBackmatter/Acknowledgments}
+\fi
+\cleardoublepage\include{FrontBackmatter/Abstract}
+\pagestyle{scrheadings}
+\cleardoublepage\include{FrontBackmatter/Contents}
+
+% *********************************************************************************************************************
+
+\cleardoublepage\pagenumbering{arabic}
+\cleardoublepage
+\include{Chapters/1-Introduction}
+
+\cleardoublepage
+\part{Background and Approach}\label{part:background}
+\include{Chapters/2-1-Background-Literature}
+\include{Chapters/2-2-Background-Approach}
+
+\cleardoublepage
+\part{Empirical Work}\label{part:empirical}
+\include{Chapters/3-1-Empirical-Pub}
+\include{Chapters/3-2-Empirical-Cafe}
+\include{Chapters/3-3-Empirical-Home}
+
+\cleardoublepage
+\part{Synopsis}\label{part:synopsis}
+\include{Chapters/4-1-Synopsis-Discussion}
+\include{Chapters/4-2-Synopsis-Conclusions}
+
+% *********************************************************************************************************************
+
+\appendix
+\renewcommand{\thechapter}{\Alph{chapter}}
+\cleardoublepage
+\part{Appendix}\label{part:appendix}
+\include{Chapters/A-StudyInfo-Pub}
+\include{Chapters/B-TranscriptNotation}
+\include{Chapters/C-Fragments-Pub}
+\include{Chapters/D-StudyInfo-Cafe}
+\include{Chapters/E-Fragments-Cafe}
+\include{Chapters/F-StudyInfo-Home}
+\include{Chapters/G-Fragments-Home}
+
+% *********************************************************************************************************************
+
+\cleardoublepage\include{FrontBackmatter/Bibliography}
+\cleardoublepage\include{FrontBackmatter/Colophon}
+\cleardoublepage\include{FrontBackmatter/Logopage}
+
+% *********************************************************************************************************************
+
+\end{document}
+
+% *********************************************************************************************************************
